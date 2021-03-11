@@ -4,6 +4,7 @@ export const SpecialItemTypes = {
   AgedBrie: 'Aged Brie',
   BackStagePasses: 'Backstage passes to a TAFKAL80ETC concert',
   Sulfuras: 'Sulfuras, Hand of Ragnaros',
+  Conjured: 'Conjured, the Unstable',
 }
 
 export const MAX_QUALITY = 50

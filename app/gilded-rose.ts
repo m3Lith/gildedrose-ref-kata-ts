@@ -5,10 +5,14 @@ import { BCKST_PASS_TRIGGER_10, BCKST_PASS_TRIGGER_5, MAX_QUALITY, SpecialItemTy
 import Item from './item'
 
 export default class GildedRose {
-  public items: Array<Item>
+  private items: Array<Item>
 
   constructor(items: Item[] = []) {
     this.items = items
+  }
+
+  public getItems(): Item[] {
+    return this.items
   }
 
   public updateQuality(): Item[] {
@@ -16,6 +20,9 @@ export default class GildedRose {
       if (item.name !== SpecialItemTypes.AgedBrie && item.name !== SpecialItemTypes.BackStagePasses) {
         if (item.quality > 0) {
           if (item.name !== SpecialItemTypes.Sulfuras) {
+            item.quality = item.quality - 1
+          }
+          if (item.name === SpecialItemTypes.Conjured && item.quality > 0) {
             item.quality = item.quality - 1
           }
         }
@@ -42,6 +49,9 @@ export default class GildedRose {
           if (item.name !== SpecialItemTypes.BackStagePasses) {
             if (item.quality > 0) {
               if (item.name !== SpecialItemTypes.Sulfuras) {
+                item.quality = item.quality - 1
+              }
+              if (item.name === SpecialItemTypes.Conjured && item.quality > 0) {
                 item.quality = item.quality - 1
               }
             }
