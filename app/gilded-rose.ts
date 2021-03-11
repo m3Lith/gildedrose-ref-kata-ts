@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable operator-assignment */
 
 import { BCKST_PASS_TRIGGER_10, BCKST_PASS_TRIGGER_5, MAX_QUALITY, SpecialItemTypes } from './consts'
@@ -11,44 +12,44 @@ export default class GildedRose {
   }
 
   public updateQuality(): Item[] {
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name !== SpecialItemTypes.AgedBrie && this.items[i].name !== SpecialItemTypes.BackStagePasses) {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name !== SpecialItemTypes.Sulfuras) {
-            this.items[i].quality = this.items[i].quality - 1
+    for (const item of this.items) {
+      if (item.name !== SpecialItemTypes.AgedBrie && item.name !== SpecialItemTypes.BackStagePasses) {
+        if (item.quality > 0) {
+          if (item.name !== SpecialItemTypes.Sulfuras) {
+            item.quality = item.quality - 1
           }
         }
-      } else if (this.items[i].quality < MAX_QUALITY) {
-        this.items[i].quality = this.items[i].quality + 1
-        if (this.items[i].name === SpecialItemTypes.BackStagePasses) {
-          if (this.items[i].sellIn <= BCKST_PASS_TRIGGER_10) {
-            if (this.items[i].quality < MAX_QUALITY) {
-              this.items[i].quality = this.items[i].quality + 1
+      } else if (item.quality < MAX_QUALITY) {
+        item.quality = item.quality + 1
+        if (item.name === SpecialItemTypes.BackStagePasses) {
+          if (item.sellIn <= BCKST_PASS_TRIGGER_10) {
+            if (item.quality < MAX_QUALITY) {
+              item.quality = item.quality + 1
             }
           }
-          if (this.items[i].sellIn <= BCKST_PASS_TRIGGER_5) {
-            if (this.items[i].quality < MAX_QUALITY) {
-              this.items[i].quality = this.items[i].quality + 1
+          if (item.sellIn <= BCKST_PASS_TRIGGER_5) {
+            if (item.quality < MAX_QUALITY) {
+              item.quality = item.quality + 1
             }
           }
         }
       }
-      if (this.items[i].name !== SpecialItemTypes.Sulfuras) {
-        this.items[i].sellIn = this.items[i].sellIn - 1
+      if (item.name !== SpecialItemTypes.Sulfuras) {
+        item.sellIn = item.sellIn - 1
       }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name !== SpecialItemTypes.AgedBrie) {
-          if (this.items[i].name !== SpecialItemTypes.BackStagePasses) {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name !== SpecialItemTypes.Sulfuras) {
-                this.items[i].quality = this.items[i].quality - 1
+      if (item.sellIn < 0) {
+        if (item.name !== SpecialItemTypes.AgedBrie) {
+          if (item.name !== SpecialItemTypes.BackStagePasses) {
+            if (item.quality > 0) {
+              if (item.name !== SpecialItemTypes.Sulfuras) {
+                item.quality = item.quality - 1
               }
             }
           } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
+            item.quality = item.quality - item.quality
           }
-        } else if (this.items[i].quality < MAX_QUALITY) {
-          this.items[i].quality = this.items[i].quality + 1
+        } else if (item.quality < MAX_QUALITY) {
+          item.quality = item.quality + 1
         }
       }
     }
