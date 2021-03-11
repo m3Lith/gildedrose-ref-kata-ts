@@ -5,3 +5,8 @@ export const SpecialItemTypes = {
   BackStagePasses: 'Backstage passes to a TAFKAL80ETC concert',
   Sulfuras: 'Sulfuras, Hand of Ragnaros',
 }
+
+export const MAX_QUALITY = 50
+
+export const BCKST_PASS_TRIGGER_10 = 10
+export const BCKST_PASS_TRIGGER_5 = 5

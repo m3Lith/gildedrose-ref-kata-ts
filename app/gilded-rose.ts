@@ -1,6 +1,6 @@
 /* eslint-disable operator-assignment */
 
-import { SpecialItemTypes } from './consts'
+import { BCKST_PASS_TRIGGER_10, BCKST_PASS_TRIGGER_5, MAX_QUALITY, SpecialItemTypes } from './consts'
 import Item from './item'
 
 export default class GildedRose {
@@ -18,16 +18,16 @@ export default class GildedRose {
             this.items[i].quality = this.items[i].quality - 1
           }
         }
-      } else if (this.items[i].quality < 50) {
+      } else if (this.items[i].quality < MAX_QUALITY) {
         this.items[i].quality = this.items[i].quality + 1
         if (this.items[i].name === SpecialItemTypes.BackStagePasses) {
-          if (this.items[i].sellIn < 11) {
-            if (this.items[i].quality < 50) {
+          if (this.items[i].sellIn <= BCKST_PASS_TRIGGER_10) {
+            if (this.items[i].quality < MAX_QUALITY) {
               this.items[i].quality = this.items[i].quality + 1
             }
           }
-          if (this.items[i].sellIn < 6) {
-            if (this.items[i].quality < 50) {
+          if (this.items[i].sellIn <= BCKST_PASS_TRIGGER_5) {
+            if (this.items[i].quality < MAX_QUALITY) {
               this.items[i].quality = this.items[i].quality + 1
             }
           }
@@ -47,7 +47,7 @@ export default class GildedRose {
           } else {
             this.items[i].quality = this.items[i].quality - this.items[i].quality
           }
-        } else if (this.items[i].quality < 50) {
+        } else if (this.items[i].quality < MAX_QUALITY) {
           this.items[i].quality = this.items[i].quality + 1
         }
       }
