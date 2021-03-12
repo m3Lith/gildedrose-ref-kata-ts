@@ -21,6 +21,9 @@ export default class GildedRose {
     return this.items
   }
 
+  // decreaseQuality/increaseQuality is called two times based on business logic for expiration.
+  // Expiration logic check could instead be moved inside those functions.
+  // This would add more complex logic to them, and possibly less readability.
   public updateQuality(): Item[] {
     for (const item of this.items) {
       if (!GildedRose.isAgedBrie(item.name) && !GildedRose.isBackStagePass(item.name)) {
@@ -91,6 +94,8 @@ export default class GildedRose {
 
     return quality
   }
+
+  // Helper functions - could be moved outside
 
   public static isAgedBrie(name: string): boolean {
     return name === SpecialItemTypes.AgedBrie
