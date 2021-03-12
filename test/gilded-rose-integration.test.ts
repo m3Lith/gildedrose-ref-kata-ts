@@ -62,6 +62,7 @@ describe('Gilded Rose', () => {
     expect(items[0].quality).toEqual(normalItemQuality - dayCount) // random
     expect(items[1].quality).toEqual(agedBrieQuality + dayCount) // AgedBrie
     expect(items[2].quality).toEqual(bkstPassQuality + dayCount) // BackStagePasses
+    expect(items[3].quality).toEqual(sulfurasQuality) // Sulfuras
     expect(items[4].quality).toEqual(conjuredQuality - dayCount * 2) // Conjured
   })
 
