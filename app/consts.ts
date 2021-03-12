@@ -7,6 +7,7 @@ export const SpecialItemTypes = {
   Conjured: 'Conjured, the Unstable',
 }
 
+export const MIN_QUALITY = 0
 export const MAX_QUALITY = 50
 
 export const BCKST_PASS_TRIGGER_10 = 10

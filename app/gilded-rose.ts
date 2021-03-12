@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable operator-assignment */
 
-import { BCKST_PASS_TRIGGER_10, BCKST_PASS_TRIGGER_5, MAX_QUALITY, SpecialItemTypes } from './consts'
+import { BCKST_PASS_TRIGGER_10, BCKST_PASS_TRIGGER_5, MIN_QUALITY, MAX_QUALITY, SpecialItemTypes } from './consts'
 import Item from './item'
 
 export default class GildedRose {
@@ -17,26 +17,19 @@ export default class GildedRose {
 
   public updateQuality(): Item[] {
     for (const item of this.items) {
-      if (item.name !== SpecialItemTypes.AgedBrie && item.name !== SpecialItemTypes.BackStagePasses) {
+      if (!GildedRose.isAgedBrie(item.name) && !GildedRose.isBackStagePass(item.name)) {
         item.quality = GildedRose.decreaseQuality(item)
-      } else if (item.quality < MAX_QUALITY) {
-        item.quality = item.quality + 1
-        if (item.name === SpecialItemTypes.BackStagePasses) {
-          item.quality = GildedRose.adjustBackStagePasses(item)
-        }
+      } else {
+        item.quality = GildedRose.increaseQuality(item)
       }
-      if (item.name !== SpecialItemTypes.Sulfuras) {
-        item.sellIn = item.sellIn - 1
-      }
-      if (item.sellIn < 0) {
-        if (item.name !== SpecialItemTypes.AgedBrie) {
-          if (item.name !== SpecialItemTypes.BackStagePasses) {
-            item.quality = GildedRose.decreaseQuality(item)
-          } else {
-            item.quality = item.quality - item.quality
-          }
-        } else if (item.quality < MAX_QUALITY) {
-          item.quality = item.quality + 1
+
+      item.sellIn = GildedRose.decreaseSellIn(item)
+
+      if (GildedRose.isExpired(item.sellIn)) {
+        if (!GildedRose.isAgedBrie(item.name)) {
+          item.quality = !GildedRose.isBackStagePass(item.name) ? GildedRose.decreaseQuality(item) : 0
+        } else {
+          item.quality = GildedRose.increaseQuality(item)
         }
       }
     }
@@ -44,12 +37,22 @@ export default class GildedRose {
     return this.items
   }
 
-  private static decreaseQuality(item: Item): number {
+  public static decreaseSellIn(item: Item): number {
+    let { sellIn } = item
+
+    if (!GildedRose.isSulfuras(item.name)) {
+      sellIn = item.sellIn - 1
+    }
+
+    return sellIn
+  }
+
+  public static decreaseQuality(item: Item): number {
     let { quality } = item
 
-    if (quality > 0 && item.name !== SpecialItemTypes.Sulfuras) {
+    if (quality > MIN_QUALITY && !GildedRose.isSulfuras(item.name)) {
       quality = quality - 1
-      if (item.name === SpecialItemTypes.Conjured && quality > 0) {
+      if (GildedRose.isConjured(item.name) && quality > MIN_QUALITY) {
         quality = quality - 1
       }
     }
@@ -57,16 +60,49 @@ export default class GildedRose {
     return quality
   }
 
-  private static adjustBackStagePasses(item: Item): number {
+  public static increaseQuality(item: Item): number {
     let { quality } = item
 
-    if (item.sellIn <= BCKST_PASS_TRIGGER_10 && quality < MAX_QUALITY) {
+    if (quality < MAX_QUALITY) {
       quality = quality + 1
-    }
-    if (item.sellIn <= BCKST_PASS_TRIGGER_5 && quality < MAX_QUALITY) {
-      quality = quality + 1
+      if (GildedRose.isBackStagePass(item.name)) {
+        quality = GildedRose.adjustBackStagePasses(item.sellIn, quality)
+      }
     }
 
     return quality
+  }
+
+  public static adjustBackStagePasses(itemSellIn: number, itemQuality: number): number {
+    let quality = itemQuality
+
+    if (itemSellIn <= BCKST_PASS_TRIGGER_10 && quality < MAX_QUALITY) {
+      quality = quality + 1
+      if (itemSellIn <= BCKST_PASS_TRIGGER_5 && quality < MAX_QUALITY) {
+        quality = quality + 1
+      }
+    }
+
+    return quality
+  }
+
+  public static isAgedBrie(name: string): boolean {
+    return name === SpecialItemTypes.AgedBrie
+  }
+
+  public static isBackStagePass(name: string): boolean {
+    return name === SpecialItemTypes.BackStagePasses
+  }
+
+  public static isSulfuras(name: string): boolean {
+    return name === SpecialItemTypes.Sulfuras
+  }
+
+  public static isConjured(name: string): boolean {
+    return name === SpecialItemTypes.Conjured
+  }
+
+  public static isExpired(sellIn: number): boolean {
+    return sellIn < 0
   }
 }
