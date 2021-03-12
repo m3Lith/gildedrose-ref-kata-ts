@@ -18,17 +18,19 @@ describe('Gilded Rose', () => {
   const conjuredQuality = 15
 
   test('Item creation', () => {
-    const normalItem = new Item('normalItemName', normalItemSellIn, normalItemQuality)
+    const normalItem = new Item('normalItem', normalItemSellIn, normalItemQuality)
+    const normalExpiresIn1 = new Item('normalExpiresIn1', 1, normalItemQuality)
+    const normalExpiresIn0 = new Item('normalExpiresIn0', 0, normalItemQuality)
     const agedBrie = new Item(SpecialItemTypes.AgedBrie, agedBrieSellIn, agedBrieQuality)
     const bkstPass = new Item(SpecialItemTypes.BackStagePasses, bkstPassSellIn, bkstPassQuality)
     const sulfuras = new Item(SpecialItemTypes.Sulfuras, sulfurasSellIn, sulfurasQuality)
     const conjured = new Item(SpecialItemTypes.Conjured, conjuredSellIn, conjuredQuality)
-    shop = new GildedRose([normalItem, agedBrie, bkstPass, sulfuras, conjured])
+    shop = new GildedRose([normalItem, agedBrie, bkstPass, sulfuras, conjured, normalExpiresIn1, normalExpiresIn0])
     const items = shop.getItems()
 
-    expect(items.length).toBe(5)
+    expect(items.length).toBe(7)
 
-    expect(items[0].name).toEqual('normalItemName')
+    expect(items[0].name).toEqual('normalItem')
     expect(items[0].sellIn).toEqual(normalItemSellIn)
     expect(items[0].quality).toEqual(normalItemQuality)
 
@@ -58,12 +60,16 @@ describe('Gilded Rose', () => {
     expect(items[2].sellIn).toEqual(bkstPassSellIn - dayCount) // BackStagePasses
     expect(items[3].sellIn).toEqual(sulfurasSellIn) // Sulfuras
     expect(items[4].sellIn).toEqual(conjuredSellIn - dayCount) // Conjured
+    expect(items[5].sellIn).toEqual(0)
+    expect(items[6].sellIn).toEqual(-1)
 
     expect(items[0].quality).toEqual(normalItemQuality - dayCount) // random
     expect(items[1].quality).toEqual(agedBrieQuality + dayCount) // AgedBrie
     expect(items[2].quality).toEqual(bkstPassQuality + dayCount) // BackStagePasses
     expect(items[3].quality).toEqual(sulfurasQuality) // Sulfuras
     expect(items[4].quality).toEqual(conjuredQuality - dayCount * 2) // Conjured
+    expect(items[5].quality).toEqual(9)
+    expect(items[6].quality).toEqual(8)
   })
 
   test('Item quality after day 2', () => {
@@ -75,12 +81,16 @@ describe('Gilded Rose', () => {
     expect(items[2].sellIn).toEqual(bkstPassSellIn - dayCount) // BackStagePasses
     expect(items[3].sellIn).toEqual(sulfurasSellIn) // Sulfuras
     expect(items[4].sellIn).toEqual(conjuredSellIn - dayCount) // Conjured
+    expect(items[5].sellIn).toEqual(-1)
+    expect(items[6].sellIn).toEqual(-2)
 
     expect(items[0].quality).toEqual(normalItemQuality - dayCount) // random
     expect(items[1].quality).toEqual(agedBrieQuality + dayCount) // AgedBrie
     expect(items[2].quality).toEqual(bkstPassQuality + dayCount + 1) // BackStagePasses
     expect(items[3].quality).toEqual(sulfurasQuality) // Sulfuras
     expect(items[4].quality).toEqual(conjuredQuality - dayCount * 2) // Conjured
+    expect(items[5].quality).toEqual(7)
+    expect(items[6].quality).toEqual(6)
   })
 
   test('Item quality after day 3', () => {

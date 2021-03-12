@@ -1,7 +1,13 @@
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable operator-assignment */
 
-import { BCKST_PASS_TRIGGER_10, BCKST_PASS_TRIGGER_5, MIN_QUALITY, MAX_QUALITY, SpecialItemTypes } from './consts'
+import {
+  BCKST_PASS_TRIGGER_10,
+  BCKST_PASS_TRIGGER_5,
+  Q_STEP,
+  MIN_QUALITY,
+  MAX_QUALITY,
+  SpecialItemTypes,
+} from './consts'
 import Item from './item'
 
 export default class GildedRose {
@@ -27,7 +33,7 @@ export default class GildedRose {
 
       if (GildedRose.isExpired(item.sellIn)) {
         if (!GildedRose.isAgedBrie(item.name)) {
-          item.quality = !GildedRose.isBackStagePass(item.name) ? GildedRose.decreaseQuality(item) : 0
+          item.quality = !GildedRose.isBackStagePass(item.name) ? GildedRose.decreaseQuality(item) : MIN_QUALITY
         } else {
           item.quality = GildedRose.increaseQuality(item)
         }
@@ -51,9 +57,9 @@ export default class GildedRose {
     let { quality } = item
 
     if (quality > MIN_QUALITY && !GildedRose.isSulfuras(item.name)) {
-      quality = quality - 1
+      quality -= Q_STEP
       if (GildedRose.isConjured(item.name) && quality > MIN_QUALITY) {
-        quality = quality - 1
+        quality -= Q_STEP
       }
     }
 
@@ -64,7 +70,7 @@ export default class GildedRose {
     let { quality } = item
 
     if (quality < MAX_QUALITY) {
-      quality = quality + 1
+      quality += Q_STEP
       if (GildedRose.isBackStagePass(item.name)) {
         quality = GildedRose.adjustBackStagePasses(item.sellIn, quality)
       }
@@ -77,9 +83,9 @@ export default class GildedRose {
     let quality = itemQuality
 
     if (itemSellIn <= BCKST_PASS_TRIGGER_10 && quality < MAX_QUALITY) {
-      quality = quality + 1
+      quality += Q_STEP
       if (itemSellIn <= BCKST_PASS_TRIGGER_5 && quality < MAX_QUALITY) {
-        quality = quality + 1
+        quality += Q_STEP
       }
     }
 
