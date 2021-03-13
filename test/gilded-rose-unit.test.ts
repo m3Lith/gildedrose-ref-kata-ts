@@ -3,8 +3,6 @@ import GildedRose from '../app/gilded-rose'
 import Item from '../app/item'
 
 describe('Gilded Rose', () => {
-  let shop: GildedRose
-
   const normalItemSellIn = 3
   const agedBrieSellIn = 11
   const bkstPassSellIn = 11
@@ -18,7 +16,7 @@ describe('Gilded Rose', () => {
   const conjuredQuality = 15
 
   test('decreaseQuality()', () => {
-    const normalItem = new Item('normalItemName', normalItemSellIn, 10)
+    const normalItem = new Item('normalItemName', normalItemSellIn, normalItemQuality)
     const itemQualityZero = new Item('normalItemName', normalItemSellIn, 0)
     const sulfuras = new Item(SpecialItemTypes.Sulfuras, sulfurasSellIn, sulfurasQuality)
     const conjured = new Item(SpecialItemTypes.Conjured, conjuredSellIn, conjuredQuality)
